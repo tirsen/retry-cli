@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const retry = require('retry');
 const spawn = require('child_process').spawn;
 const Getopt = require('node-getopt');
