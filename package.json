@@ -3,7 +3,7 @@
   "name": "retry-cli",
   "description": "Retry with exponential backoff for the command line.",
   "license": "MIT",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/tirsen/retry-cli",
   "repository": {
     "type": "git",
