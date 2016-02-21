@@ -18,5 +18,12 @@
   "dependencies": {
     "node-getopt": "^0.2.3",
     "retry": "^0.9.0"
+  },
+  "devDependencies": {
+    "ava": "^0.12.0",
+    "execa": "^0.2.2"
+  },
+  "scripts": {
+    "test": "ava"
   }
 }
