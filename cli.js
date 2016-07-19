@@ -41,13 +41,18 @@ operation = retry.operation({
 operation.attempt(function (currentAttempt) {
   const ls = spawn(cmd[0], cmd.slice(1), {stdio: 'inherit'});
 
-  ls.on('exit', (code, signal) => {
-    if (code != 0) {
-      operation.retry(true);
+  function retryOrExit(err) {
+    const retrying = operation.retry(err);
+    if (!retrying) {
+      process.exit(err);
     }
+  }
+
+  ls.on('exit', (code, signal) => {
+    retryOrExit(code !== 0);
   });
 
   ls.on('error', (err) => {
-    operation.retry(err);
+    retryOrExit(err);
   });
 });
