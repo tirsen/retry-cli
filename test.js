@@ -8,12 +8,15 @@ test('success case', t => {
   });
 });
 test('retry case', t => {
-  return execa('node', ['./cli.js', '-n', '3', '-t', '100', '--', 'ls', 'asdf']).then((result) => {
+  return execa('node', ['./cli.js', '-n', '3', '-t', '100', '--', 'ls', 'asdf']).then(() => {
+      t.fail('should throw because exit code should be non-zero');
+  }, (result) => {
     const err =
 `ls: asdf: No such file or directory
 ls: asdf: No such file or directory
 ls: asdf: No such file or directory
-ls: asdf: No such file or directory`;
+ls: asdf: No such file or directory
+`;
     t.ok(result.stdout === '');
     t.ok(result.stderr === err);
   });
