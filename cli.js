@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const retry = require('retry');
-const spawn = require('child_process').spawn;
+const spawn = require('cross-spawn');
 const Getopt = require('node-getopt');
 
 getopt = new Getopt([

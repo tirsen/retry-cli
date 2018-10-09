@@ -16,6 +16,7 @@
     "node": "*"
   },
   "dependencies": {
+    "cross-spawn": "^6.0.5",
     "node-getopt": "^0.3.2",
     "retry": "^0.10.1"
   },
