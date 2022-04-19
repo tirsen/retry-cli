@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-const retry = require('retry');
-const spawn = require('cross-spawn');
-const Getopt = require('node-getopt');
+import retry from 'retry';
+import spawn from 'cross-spawn';
+import Getopt from 'node-getopt';
 
-getopt = new Getopt([
+const getopt = new Getopt([
   ['n', 'retries=ARG', 'Maximum amount of times to retry the operation. (default: 10)'],
   ['', 'factor=ARG', 'Exponential factor to use. (default: 2)'],
   ['t', 'min-timeout=ARG', 'Number of milliseconds before starting the first retry. (default: 1000)'],
@@ -28,16 +28,17 @@ const cmd = opt.argv.slice(2);
 
 if (!cmd[0]) {
   getopt.showHelp();
-  return;
+  process.exit();
 }
 
-operation = retry.operation({
+const operation = retry.operation({
   retries: opt.options['retries'] || 10,
   factor: opt.options['factor'] || 2,
   minTimeout: opt.options['min-timeout'] || 1000,
   maxTimeout: opt.options['max-timeout'] || Infinity,
   randomize: opt.options['randomize'] || false
 });
+
 operation.attempt(function (currentAttempt) {
   const ls = spawn(cmd[0], cmd.slice(1), {stdio: 'inherit'});
 
@@ -55,4 +56,5 @@ operation.attempt(function (currentAttempt) {
   ls.on('error', (err) => {
     retryOrExit(err);
   });
+
 });

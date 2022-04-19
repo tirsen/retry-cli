@@ -5,6 +5,7 @@
   "license": "MIT",
   "version": "0.6.0",
   "homepage": "https://github.com/tirsen/retry-cli",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git://github.com/tirsen/retry-cli.git"
@@ -16,15 +17,16 @@
     "node": "*"
   },
   "dependencies": {
-    "cross-spawn": "^6.0.5",
+    "cross-spawn": "^7.0.3",
     "node-getopt": "^0.3.2",
-    "retry": "^0.10.1"
+    "retry": "^0.13.1"
   },
   "devDependencies": {
-    "ava": "^0.12.0",
-    "execa": "^0.10.0"
+    "ava": "^4.2.0",
+    "execa": "^6.1.0"
   },
   "scripts": {
-    "test": "ava"
+    "test": "LANG=en_US.UTF-8 ava",
+    "start": "node ./cli.js"
   }
 }
