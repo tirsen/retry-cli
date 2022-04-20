@@ -1,10 +1,10 @@
-const test = require('ava');
-const execa = require('execa');
+import test from 'ava';
+import { execa } from 'execa';
 
 test('success case', t => {
   return execa('node', ['./cli.js', '--', 'echo', 'asdf']).then((result) => {
-    t.ok(result.stdout === 'asdf');
-    t.ok(result.stderr === '');
+    t.is(result.stdout, 'asdf');
+    t.is(result.stderr, '');
   });
 });
 test('retry case', t => {
@@ -12,12 +12,11 @@ test('retry case', t => {
       t.fail('should throw because exit code should be non-zero');
   }, (result) => {
     const err =
-`ls: asdf: No such file or directory
-ls: asdf: No such file or directory
-ls: asdf: No such file or directory
-ls: asdf: No such file or directory
-`;
-    t.ok(result.stdout === '');
-    t.ok(result.stderr === err);
+`ls: cannot access 'asdf': No such file or directory
+ls: cannot access 'asdf': No such file or directory
+ls: cannot access 'asdf': No such file or directory
+ls: cannot access 'asdf': No such file or directory`;
+    t.is(result.stdout, '');
+    t.is(result.stderr, err);
   });
 });
