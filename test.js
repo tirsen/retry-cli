@@ -11,12 +11,8 @@ test('retry case', t => {
   return execa('node', ['./cli.js', '-n', '3', '-t', '100', '--', 'ls', 'asdf']).then(() => {
       t.fail('should throw because exit code should be non-zero');
   }, (result) => {
-    const err =
-`ls: cannot access 'asdf': No such file or directory
-ls: cannot access 'asdf': No such file or directory
-ls: cannot access 'asdf': No such file or directory
-ls: cannot access 'asdf': No such file or directory`;
     t.is(result.stdout, '');
-    t.is(result.stderr, err);
+    // Make sure we have 4 errors
+    t.is((result.stderr.match(/asdf/g) || []).length, 4);
   });
 });
