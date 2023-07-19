@@ -42,19 +42,19 @@ const operation = retry.operation({
 operation.attempt(function (currentAttempt) {
   const ls = spawn(cmd[0], cmd.slice(1), {stdio: 'inherit'});
 
-  function retryOrExit(err) {
-    const retrying = operation.retry(err);
+  function retryOrExit(code) {
+    const retrying = operation.retry();
     if (!retrying) {
-      process.exit(err);
+      process.exit(code);
     }
   }
 
   ls.on('exit', (code, signal) => {
-    retryOrExit(code !== 0);
+    retryOrExit(code);
   });
 
   ls.on('error', (err) => {
-    retryOrExit(err);
+    retryOrExit(-1);
   });
 
 });
