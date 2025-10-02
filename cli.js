@@ -50,6 +50,6 @@ operation.attempt((_currentAttempt) => {
   const ls = spawn(cmd[0], cmd.slice(1), {stdio: 'inherit'});
 
   // The strict 0 check also catches null (involuntary exit via signal) as a retryable error
-  ls.on('exit', (code) => retryOrExit(code !== 0 ? new Error(`Exited with code ${code}`) : undefined), code);
+  ls.on('exit', (code) => retryOrExit(code !== 0 ? new Error(`Exited with code ${code}`) : undefined, code ?? 1));
   ls.on('error', (err) => retryOrExit(err, 1));
 });

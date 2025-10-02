@@ -22,11 +22,12 @@
     "retry": "^0.13.1"
   },
   "devDependencies": {
-    "ava": "^4.2.0",
+    "ava": "^6.0.0",
+    "cross-env": "^10.1.0",
     "execa": "^6.1.0"
   },
   "scripts": {
-    "test": "LANG=en_US.UTF-8 ava",
+    "test": "cross-env LANG=en_US.UTF-8 ava",
     "start": "node ./cli.js"
   }
 }
