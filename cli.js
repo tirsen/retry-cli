@@ -5,7 +5,7 @@ import Getopt from 'node-getopt';
 
 const getopt = new Getopt([
   ['n', 'retries=ARG', 'Maximum amount of times to retry the operation. (default: 10)'],
-  ['', 'factor=ARG', 'Exponential factor to use. (default: 2)'],
+  ['f', 'factor=ARG', 'Exponential factor to use. (default: 2)'],
   ['t', 'min-timeout=ARG', 'Number of milliseconds before starting the first retry. (default: 1000)'],
   ['', 'max-timeout=ARG', 'Maximum number of milliseconds between two retries. (default: Infinity)'],
   ['', 'randomize', 'Randomizes the timeouts by multiplying with a factor between 1 to 2.'],
@@ -39,22 +39,17 @@ const operation = retry.operation({
   randomize: opt.options['randomize'] || false
 });
 
-operation.attempt(function (currentAttempt) {
+/** @param {Error | undefined} err */
+/** @param {number} code */
+function retryOrExit(err, code) {
+  const willRetry = operation.retry(err);
+  if (!willRetry) process.exit(code)
+}
+
+operation.attempt((_currentAttempt) => {
   const ls = spawn(cmd[0], cmd.slice(1), {stdio: 'inherit'});
 
-  function retryOrExit(err) {
-    const retrying = operation.retry(err);
-    if (!retrying) {
-      process.exit(err);
-    }
-  }
-
-  ls.on('exit', (code, signal) => {
-    retryOrExit(code !== 0);
-  });
-
-  ls.on('error', (err) => {
-    retryOrExit(err);
-  });
-
+  // The strict 0 check also catches null (involuntary exit via signal) as a retryable error
+  ls.on('exit', (code) => retryOrExit(code !== 0 ? new Error(`Exited with code ${code}`) : undefined, code ?? 1));
+  ls.on('error', (err) => retryOrExit(err, 1));
 });
